@@ -9,10 +9,10 @@ import (
 )
 
 type resource struct {
-	service Service
+	service ServiceInterface
 }
 
-func RegisterHandler(r *mux.Router, service Service) {
+func RegisterHandler(r *mux.Router, service ServiceInterface) {
 	resource := resource{service: service}
 	r.HandleFunc("/contacts", resource.query).Methods(http.MethodGet)
 	// r.HandleFunc("/contact", createContact).Methods(http.MethodPost)

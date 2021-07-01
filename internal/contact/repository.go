@@ -2,7 +2,7 @@ package contact
 
 import "gorm.io/gorm"
 
-type Repository interface {
+type RepositoryInterface interface {
 	Query(offset, limit int, query string) ([]Contact, error)
 }
 
@@ -10,7 +10,7 @@ type repository struct {
 	db gorm.DB
 }
 
-func NewRepository(db gorm.DB) Repository {
+func NewRepository(db gorm.DB) RepositoryInterface {
 	return repository{db}
 }
 

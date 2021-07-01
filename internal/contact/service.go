@@ -3,19 +3,19 @@ package contact
 import "github.com/sub-rat/contactbook-api/internal/model"
 
 // offset, limit => pagination
-type Service interface {
+type ServiceInterface interface {
 	Query(offset, limit int, query string) ([]Contact, error)
 }
 
 type service struct {
-	repo Repository
+	repo RepositoryInterface
 }
 
 type Contact struct {
 	model.Contact
 }
 
-func NewService(repo Repository) Service {
+func NewService(repo RepositoryInterface) ServiceInterface {
 	return service{repo}
 }
 
