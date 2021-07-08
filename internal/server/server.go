@@ -1,8 +1,10 @@
 package server
 
 import (
+	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/gorilla/mux"
 	"github.com/sub-rat/contactbook-api/config"
@@ -34,7 +36,8 @@ func (server *server) Run() {
 	// server initialize
 	server.initialize()
 	// Run Server
-	log.Fatal(http.ListenAndServe(":8080", server.Router))
+	port := os.Getenv("PORT")
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", port), server.Router))
 }
 
 func (server *server) initialize() {
