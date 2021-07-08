@@ -19,6 +19,8 @@ func RegisterHandler(r *mux.Router, service ServiceInterface) {
 	r.HandleFunc("/contacts", resource.query).Methods(http.MethodGet)
 	r.HandleFunc("/contact", resource.create).Methods(http.MethodPost)
 	r.HandleFunc("/contact/{id}", resource.get).Methods(http.MethodGet)
+	r.HandleFunc("/contact/{id}", resource.update).Methods(http.MethodPut)
+	r.HandleFunc("/contact/{id}", resource.delete).Methods(http.MethodDelete)
 }
 
 func (resource resource) get(w http.ResponseWriter, r *http.Request) {
@@ -55,6 +57,48 @@ func (resource resource) create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	utils.RespondJSON(w, http.StatusOK, contact)
+}
+
+func (resource resource) update(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		utils.RespondError(w, http.StatusUnprocessableEntity, err.Error())
+		return
+	}
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		utils.RespondError(w, http.StatusUnprocessableEntity, err.Error())
+		return
+	}
+	data := Contact{}
+	err = json.Unmarshal(body, &data)
+	if err != nil {
+		utils.RespondError(w, http.StatusUnprocessableEntity, err.Error())
+		return
+	}
+	contact, err := resource.service.Update(uint(id), data)
+	if err != nil {
+		utils.RespondError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+	utils.RespondJSON(w, http.StatusCreated, contact)
+}
+
+func (resource *resource) delete(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		utils.RespondError(w, http.StatusUnprocessableEntity, err.Error())
+		return
+	}
+	_, err = resource.service.Delete(uint(id))
+	if err != nil {
+		utils.RespondError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+	utils.RespondJSON(w, http.StatusNoContent, nil)
+
 }
 
 func (resource resource) query(w http.ResponseWriter, r *http.Request) {
