@@ -9,7 +9,7 @@ services:
       POSTGRES_DB: ${POSTGRES_DATABASE:-contact_book}
       PGDATA: /data/postgres
     volumes:
-       - postgres:/data/postgres
+       - ./postgres:/data/postgres
     ports:
       - "5433:5432"
     restart: unless-stopped

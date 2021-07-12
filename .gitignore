@@ -162,3 +162,5 @@ Temporary Items
 bin
 .env
 # End of https://www.toptal.com/developers/gitignore/api/go,macos,visualstudiocode,intellij+all
+
+postgres
