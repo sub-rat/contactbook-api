@@ -31,7 +31,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "8087:8080"
+      - "8080:8080"
     environment: 
       - PORT=8080
       - DB_HOST=postgres
