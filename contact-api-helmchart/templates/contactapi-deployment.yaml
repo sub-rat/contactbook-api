@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert --chart
+    kompose.version: 1.22.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: contactapi
+  name: contactapi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: contactapi
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert --chart
+        kompose.version: 1.22.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: contactapi
+    spec:
+      containers:
+        - env:
+            - name: DB_HOST
+              value: postgres
+            - name: DB_NAME
+              value: contact_book
+            - name: DB_PASSWORD
+              value: changepassword
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_USERNAME
+              value: postgres
+            - name: PORT
+              value: "8080"
+          image: sub-rat/contactapi
+          imagePullPolicy: Never
+          name: contactapi
+          ports:
+            - containerPort: 8080
+          resources: {}
+      restartPolicy: Always
+status: {}
